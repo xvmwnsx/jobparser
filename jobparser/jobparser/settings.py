@@ -29,9 +29,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-6bm9jyz^1e09enl6e5(4fw8b!2@y*mkznvu$%xfet!088vs@zm'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',') if os.environ.get('ALLOWED_HOSTS') else ['*']
 
 
 # Application definition
@@ -86,16 +86,17 @@ WSGI_APPLICATION = 'jobparser.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'jobparser',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres123',
-        'HOST': '127.0.0.1',
-        'PORT': 5432,
+        'NAME': os.environ.get('DATABASE_NAME', 'jobparser'),
+        'USER': os.environ.get('DATABASE_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'postgres123'),
+        'HOST': os.environ.get('DATABASE_HOST', '127.0.0.1'),
+        'PORT': int(os.environ.get('DATABASE_PORT', 5432)),
         'OPTIONS': {
             'client_encoding': 'UTF8',
         },
     }
 }
+
 
 
 
@@ -133,4 +134,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+TEMPLATES[0]['DIRS'] = [BASE_DIR / 'templates']
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'

@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: jobparser_db
+    environment:
+      POSTGRES_DB: jobparser
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    container_name: jobparser_web
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./jobparser:/app
+      - static_volume:/app/staticfiles
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+      - DATABASE_NAME=jobparser
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres123
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - PYTHONIOENCODING=utf-8
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  static_volume:
+
