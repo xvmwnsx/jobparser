@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Загрузка резюме{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-semibold mb-4">Загрузка резюме</h1>
+
+<form method="post" enctype="multipart/form-data" class="bg-white p-6 rounded shadow">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit"
+            class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+        Загрузить
+    </button>
+</form>
+{% endblock %}

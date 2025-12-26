@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Job Parser{% endblock %}</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Alpine.js -->
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body class="bg-gray-100 text-gray-900 min-h-screen flex flex-col">
+
+<!-- Header -->
+<header class="bg-white shadow">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <a href="/" class="text-xl font-semibold">
+            Job Parser
+        </a>
+
+        <nav class="space-x-4">
+            <a href="/" class="hover:underline">Поиск</a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'upload_resume' %}" class="hover:underline">Резюме</a>
+                <a href="#" class="hover:underline">Профиль</a>
+                <a href="{% url 'logout' %}" class="hover:underline">Выход</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="hover:underline">Вход</a>
+                <a href="{% url 'signup' %}" class="hover:underline">Регистрация</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<!-- Main content -->
+<main class="container mx-auto px-4 py-6 flex-1">
+    {% block content %}
+    {% endblock %}
+</main>
+
+<!-- Footer -->
+<footer class="bg-white border-t">
+    <div class="container mx-auto px-4 py-4 text-sm text-gray-600 text-center">
+        © {{ now|date:"Y" }} Job Parser
+    </div>
+</footer>
+
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>
