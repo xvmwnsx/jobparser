@@ -44,10 +44,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'vacancies',
-    'search',
-    'accounts',
-    'notifications',
+    'django.contrib.postgres',
+
+    'vacancies.apps.VacanciesConfig',
+    'search.apps.SearchConfig',
+
+    'accounts.apps.AccountsConfig',
+    'notifications.apps.NotificationsConfig',
 ]
 
 MIDDLEWARE = [
